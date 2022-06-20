@@ -1,0 +1,38 @@
+.data {
+  resize: both;
+  text-align: center;
+  line-height: 1.5;
+  font-size: 1.3rem;
+  font-weight: 300;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  min-width: 40rem;
+}
+.title {
+  margin: 1rem 0;
+  line-height: 1.5;
+  font-size: 1.7rem;
+  font-weight: 300;
+  color: #878787;
+  max-width: 40rem;
+}
+.list {
+  margin: auto;
+  list-style: none;
+}
+.listItem {
+  text-align: left;
+  font-size: 1.3rem;
+}
+.listItem a {
+  color: #0070f3;
+  text-decoration: none;
+}
+
+.plotDiv {
+  margin: 0;
+  padding: 0;
+}
+.plot {
+  background-color: rgba(239, 180, 180, 0.177);
+  min-height: 4rem;
+}

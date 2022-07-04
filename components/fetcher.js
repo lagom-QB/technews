@@ -23,7 +23,7 @@ const chart = (apiData) => {
       ),
     mouseout = function (d) {
       // console.log("mouse left");
-      d3.selectAll("#tooltip").transition().delay(10).remove();
+      d3.selectAll("#tooltip").transition().delay(5).remove();
 
       d3.select(this)
         .style("opacity", 0.8)
@@ -32,7 +32,10 @@ const chart = (apiData) => {
         .attr("stroke-width", 0.4);
     },
     mouseover = (d) => {
-      // console.log("mouse entered");
+      // console.log(
+      //   "mouse entered",
+      //   d.toElement.innerHTML.split(",")[1].split("<")[0]
+      // );
 
       d3.select(this)
         .style("opacity", 0.8)
@@ -45,10 +48,12 @@ const chart = (apiData) => {
         .attr("id", "tooltip")
         .style("opacity", 0.8)
         .attr("fill", "#0C9CDF")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-        .style("font-size", 18)
-        .style("background", "grey")
-        .text(d.path[0].innerHTML.split(",")[1].split("<")[0]);
+        .attr(
+          "transform",
+          "translate(" + margin.left + "," + margin.top + margin.bottom + ")"
+        )
+        .style("font-size", 30)
+        .text(d.toElement.innerHTML.split(",")[1].split("<")[0]);
     };
   /*  svg
     .append("text")

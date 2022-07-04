@@ -1,72 +1,114 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./fetcher.module.css";
 
 import * as d3 from "d3";
 
-function chart(apiData) {
-  const svgWidth = 500,
-    svgHeight = 500,
-    data = apiData,
-    barPadding = 5,
-    barWidth = svgWidth / apiData.length;
+const chart = (apiData) => {
+  const margin = { top: 0, right: 1, bottom: 1, left: 1 },
+    svgWidth = 760 - margin.left - margin.right,
+    svgHeight = 120, //- margin.top - margin.bottom,
+    data = apiData;
 
-  const svg = d3
-    .create("svg")
-    .attr("viewBox", [0, 0, svgWidth, svgHeight])
-    .attr("width", svgWidth)
-    .attr("height", svgHeight);
+  var svg = d3
+      .select("#plot")
+      .append("svg")
+      .attr("viewBox", [0, 0, 1300, 80])
+      .attr("width", svgWidth + margin.left + margin.right)
+      .attr("height", svgHeight + margin.top + margin.bottom)
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+      .call(
+        d3.zoom().on("zoom", function () {
+          svg.attr("transform", d3.zoomTransform(this));
+        })
+      ),
+    mouseout = function (d) {
+      // console.log("mouse left");
+      d3.selectAll("#tooltip").transition().delay(10).remove();
+
+      d3.select(this)
+        .style("opacity", 0.8)
+        .attr("fill", "#0C9CDF")
+        .attr("stroke", "white")
+        .attr("stroke-width", 0.4);
+    },
+    mouseover = (d) => {
+      // console.log("mouse entered");
+
+      d3.select(this)
+        .style("opacity", 0.8)
+        .attr("fill", "#7ED26D")
+        .attr("stroke", "white")
+        .attr("stroke-width", 0.4);
+
+      svg
+        .append("text")
+        .attr("id", "tooltip")
+        .style("opacity", 0.8)
+        .attr("fill", "#0C9CDF")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        .style("font-size", 18)
+        .style("background", "grey")
+        .text(d.path[0].innerHTML.split(",")[1].split("<")[0]);
+    };
+  /*  svg
+    .append("text")
+    .attr("fill", "#0C9CDF")
+    .attr("transform", "translate(320,0)")
+    .style("font-size", "16px")
+    .style("text-decoration", "underline")
+    .text("Times users made posts"); */
 
   svg
-    .selectAll("rect")
-    .data(apiData)
+    .selectAll("mycircle")
+    .append("g")
+    .data(data)
     .enter()
-    .append("rect")
-    .attr("x", function (d, i) {
-      return i;
+    .append("circle")
+    .attr("cx", function (d, i) {
+      return (i + 1) * 12;
     })
-    .attr("y", function (d) {
+    .attr("cy", function (d) {
       let time = new Date(d.data.created)
         .toLocaleString()
         .split(" ")[1]
         .split(":");
 
-      return svgHeight - (time[0] * 60 + time[1]);
+      const res = time[0] * 60 + time[1];
+      return res.slice(3, res.length);
     })
-    .attr("width", () => {
-      let res = barWidth + barPadding;
-      return res;
-    })
-    .attr("height", (d) => {
+    .attr("stroke", "white")
+    .attr("stroke-width", 0.4)
+    .attr("r", (d) => {
       let time = new Date(d.data.created)
         .toLocaleString()
         .split(" ")[1]
         .split(":");
-      return time[0] * 60 + time[1] + time[2] / 60;
+      let actual = ((time[0] * 60 + time[1] + time[2] / 60) / 100).toString();
+      const res =
+        actual.split(".")[1].slice(0, 1) +
+        "." +
+        actual.split(".")[1].slice(2, actual.length);
+      return res * 2;
     })
-    .attr("transform", (d, i) => {
-      let translate = [barWidth * i, 0];
-      // console.log("translate", translate);
-      return `translate(${translate})`;
-    })
-    .attr("fill", "#7ED26D")
-    .on("mouseover", function () {
-      d3.select(this).transition().attr("fill", "#0C9CDF");
-    })
-    .on("mouseout", function () {
-      d3.select(this).transition().attr("fill", "#7ED26D");
-    })
-    .attr("fill", "#7ED26D")
-    .append("text")
-    .text((d) => new Date(d.data.created_utc).toLocaleString().split(" ")[0]);
-
+    .attr("fill", "red")
+    .attr("opacity", 0.8)
+    // .style("margin-top", 20)
+    .on("mouseover", mouseover)
+    .on("mouseout", mouseout)
+    .append("div")
+    .text(
+      (d) => new Date(d.data.created_utc).toLocaleString() //.split(" ")[0].slice(0, 5)
+    );
+  console.log("plot ...", svg.node());
   return svg.node();
-}
+};
 
-function Fetcher() {
+function AboutTime() {
   const url = "https://www.reddit.com/r/technews/hot.json?limit=100000",
     [apiData, setApiData] = useState(null),
     [error, setError] = useState(null),
-    [loading, setLoading] = useState(true);
+    [loading, setLoading] = useState(true),
+    svg = useRef(null);
 
   useEffect(() => {
     const getData = async () => {
@@ -79,9 +121,15 @@ function Fetcher() {
         })
         .then((apiData) => {
           setApiData(apiData.data.children);
+
+          const plot = chart(apiData.data.children);
+
+          if (svg.current) {
+            svg.current.appendChild(plot);
+          }
         })
         .catch((error) => {
-          console.error("Error fetching apiData :" + error);
+          console.error("Error fetching data :\t" + error);
           setError(error);
         })
         .finally(() => {
@@ -95,12 +143,9 @@ function Fetcher() {
   if (loading) return "loading...";
   if (error) return "Error !" + error;
 
-  const plot = chart(apiData);
-  console.log("plot ...", typeof plot, plot);
-
   return (
     <div className={styles.data}>
-      <span className={styles.title}>Examples of the Data</span>
+      <span className={styles.title}>Data sample</span>
       <ol className={styles.list}>
         {apiData.slice(0, 2).map((obj, idx) => (
           <li key={idx} className={styles.listItem}>
@@ -133,15 +178,22 @@ function Fetcher() {
       </ol>
       <div className={styles.plotDiv}>
         <br />
-        <span className={styles.title}>Bar Chart</span>
-        <div className={styles.plot}>{plot}</div>
+        <span className={styles.title}>
+          How often do the people post at given times?
+        </span>
+        <div className={styles.plot} ref={svg} id="plot" />
         <hr />
+        <div className={styles.text}>
+          I realised the fewest post were made at{" "}
+          <code className={styles.conclude}>5:00:52</code> while the most posts
+          were made at<code className={styles.conclude}>4:59:58</code>
+        </div>
       </div>
     </div>
   );
 }
 
-export default Fetcher;
+export default AboutTime;
 
 {
   /*  <div className={styles.grid}>

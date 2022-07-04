@@ -1,7 +1,8 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 
-import Fetcher from "../components/fetcher";
+import AboutTime from "../components/fetcher";
+import WordCount from "../components/fetcher1";
 
 export default function Home() {
   const underlineText = { textDecoration: "underline", display: "inline" };
@@ -67,7 +68,12 @@ export default function Home() {
           each post because it will be important in my analysis.
         </div>
 
-        <Fetcher />
+        <AboutTime />
+        <WordCount />
+
+        <div className={styles.text}>
+          In the future, what would be interesting to explore?
+        </div>
       </main>
     </div>
   );

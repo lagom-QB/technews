@@ -29,12 +29,9 @@
   text-decoration: none;
 }
 
-.plotDiv {
-  margin: 0;
-  padding: 0;
-}
-.plot {
-  min-height: 7rem;
+.wordsPlot {
+  min-height: 70rem;
+  min-width: 60rem;
   border-radius: 11px;
   border: 0.1px solid rgb(35 35 35 / 10%);
   padding: 0.3rem;

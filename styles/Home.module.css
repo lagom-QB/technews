@@ -86,14 +86,14 @@
 }
 
 .code {
-  background: #fafafa;
-  border-radius: 5px;
+  color: #fffed1;
+  background: rgb(0 112 244 / 63%);
+  border-radius: 2px;
   padding: 0.75rem;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
     Bitstream Vera Sans Mono, Courier New, monospace;
 }
-
 .grid {
   display: flex;
   align-items: center;

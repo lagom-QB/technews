@@ -68,7 +68,7 @@ const chart = (apiData, creatingChart, setCreatingChart) => {
         .split(":");
 
       const res = time[0] * 60 + time[1];
-      return res.slice(3, res.length);
+      return parseInt(res.slice(3, res.length))+10;
     })
     .attr("stroke", "white")
     .attr("stroke-width", 0.4)

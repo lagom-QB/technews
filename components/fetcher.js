@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Suspense } from "react";
 import styles from "./fetcher.module.css";
 
 import * as d3 from "d3";
@@ -94,8 +94,12 @@ const chart = (apiData, creatingChart, setCreatingChart) => {
       (d) => new Date(d.data.created_utc).toLocaleString() //.split(" ")[0].slice(0, 5)
     );
 
+  if (creatingChart) {
+    // document.getElementById("plot").appendChild("building Chart...");
+  }
   if (svg.node()) {
     setCreatingChart(false);
+    console.log("Created the First graph");
   }
 
   return svg.node();
@@ -128,8 +132,6 @@ function AboutTime() {
           );
 
           // console.log("plot ...", plot);
-          if (creatingChart) return "building Chart...";
-
           if (svg.current) {
             svg.current.appendChild(plot);
           }
@@ -188,7 +190,10 @@ function AboutTime() {
         <span className={styles.title}>
           How often do the people post at given times?
         </span>
-        <div className={styles.plot} ref={svg} id="plot" />
+        <Suspense fallback={"Building chart..."}>
+          <div className={styles.plot} ref={svg} id="plot"></div>
+        </Suspense>
+
         <hr />
         <div className={styles.text}>
           I realised the fewest post were made at{" "}

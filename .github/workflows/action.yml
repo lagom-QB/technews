@@ -22,8 +22,6 @@ jobs:
 
       - name: Installing my packages
         run: yarn install
-      - name: Install eslint
-        run: yarn add --dev eslint
 
       - name: Build my App
         run: npm run build && npm run export && touch ./out/.nojekyll

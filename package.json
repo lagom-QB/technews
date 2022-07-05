@@ -2,15 +2,14 @@
   "name": "technews",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://lagom-qb.github.io/technews",
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "start": "react-scripts start",
-    "build": "next build",
-    "dev": "next dev",
     "lint": "next lint",
-    "export": "next export"
+    "export": "next export",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
   },
   "dependencies": {
     "@types/d3": "^7.4.0",

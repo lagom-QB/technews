@@ -341,6 +341,7 @@ function WordCount() {
           );
           setWordsObject(wordfrequency);
 
+          console.log("plot 2...", newplot);
           if (wordSvg.current) {
             if (creatingChart) {
               return "building Chart...";

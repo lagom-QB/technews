@@ -157,7 +157,7 @@ function AboutTime() {
             setCreatingChart
           );
 
-          // console.log("plot ...", plot);
+          console.log("plot 1...", plot);
           if (svg.current) {
             svg.current.appendChild(plot);
           }

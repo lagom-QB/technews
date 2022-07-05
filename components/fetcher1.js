@@ -360,7 +360,7 @@ function WordCount() {
     getData();
   }, []);
 
-  if (loading) return "\nloading...";
+  if (loading || creatingChart) return "\nloading...";
   if (error) return "Error !" + error;
 
   return (

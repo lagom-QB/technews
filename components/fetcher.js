@@ -16,13 +16,12 @@ const chart = (apiData, creatingChart, setCreatingChart) => {
       .attr("viewBox", [0, 0, 1300, 80])
       .attr("width", svgWidth + margin.left + margin.right)
       .attr("height", svgHeight + margin.top + margin.bottom)
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-      .call(
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")"),
+    /* .call(
         d3.zoom().on("zoom", function () {
           svg.attr("transform", d3.zoomTransform(this));
         })
-      ),
-    mouseout = function (d) {
+      ) */ mouseout = function (d) {
       // console.log("mouse left");
       d3.selectAll("#tooltip").transition().delay(5).remove();
 
@@ -68,7 +67,7 @@ const chart = (apiData, creatingChart, setCreatingChart) => {
         .split(":");
 
       const res = time[0] * 60 + time[1];
-      return parseInt(res.slice(3, res.length))+10;
+      return parseInt(res.slice(3, res.length)) + 10;
     })
     .attr("stroke", "white")
     .attr("stroke-width", 0.4)
@@ -94,9 +93,6 @@ const chart = (apiData, creatingChart, setCreatingChart) => {
       (d) => new Date(d.data.created_utc).toLocaleString() //.split(" ")[0].slice(0, 5)
     );
 
-  if (creatingChart) {
-    // document.getElementById("plot").appendChild("building Chart...");
-  }
   if (svg.node()) {
     setCreatingChart(false);
     console.log("Created the First graph");
@@ -178,7 +174,7 @@ function AboutTime() {
     getData();
   }, []);
 
-  if (loading) return "loading...";
+  if (loading || creatingChart) return "loading...";
   if (error) return "Error !" + error;
   console.log(apiData);
 

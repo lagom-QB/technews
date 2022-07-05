@@ -7,14 +7,25 @@
 .main {
   /* min-height: 100vh; */
   padding: 4rem 0;
-  /* flex: 1; */
+  flex: 2;
   /* display: flex;
   flex-direction: column;
   justify-content: center; */
   align-items: center;
-  width: 96vw !important;
+  width: 96vw;
 }
-
+@media screen and (min-width: 600px) {
+  .main {
+    max-width: 96vw;
+    margin: 0 auto;
+    text-align: -webkit-center;
+    justify-content: left;
+  }
+  .container {
+    margin: 0;
+    padding: 0;
+  }
+}
 .footer {
   display: flex;
   flex: 1;

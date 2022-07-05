@@ -11,7 +11,7 @@
 .title {
   margin: 1rem 0;
   line-height: 1.5;
-  font-size: 2.5rem;
+  font-size: 2.3rem;
   font-weight: 300;
   color: #878787;
   max-width: 40rem;
@@ -32,7 +32,7 @@
 .plotDiv {
   margin: 0 auto;
   padding: 0;
-  min-width: 90vw;
+  /* width: 90vw; */
 }
 .plot {
   min-height: 7rem;

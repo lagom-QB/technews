@@ -30,16 +30,18 @@
 }
 
 .plotDiv {
-  margin: 0;
+  margin: 0 auto;
   padding: 0;
+  min-width: 90vw;
 }
 .plot {
   min-height: 7rem;
-  max-width: 80vw;
+  margin: 0 auto;
   border-radius: 11px;
   border: 0.1px solid rgb(35 35 35 / 10%);
   padding: 0.3rem;
   overflow: hidden;
+  margin-right: 1rem;
 }
 .text {
   margin: 2rem 0;

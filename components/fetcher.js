@@ -226,9 +226,9 @@ function AboutTime() {
 
         <hr />
         <div className={styles.text}>
-          I realised <u><em>{times[leastCommonWord(times)]} </em></u> post was/were made
+          I realised <u>{times[leastCommonWord(times)]} </u> post was/were made
           at <code className={styles.conclude}>{leastCommonWord(times)}</code>{" "}
-          while <u><em>{times[mostCommonWord(times)]} </em></u> posts was/were made at
+          while <u>{times[mostCommonWord(times)]} </u> posts was/were made at
           <code className={styles.conclude}>{mostCommonWord(times)}</code>
         </div>
       </div>

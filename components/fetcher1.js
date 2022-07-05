@@ -4,6 +4,7 @@ import styles from "./fetcher1.module.css";
 import * as d3 from "d3";
 
 const frequencyChart = (wordCount, creatingChart, setCreatingChart) => {
+  console.log("Creating second chart here...");
   const margin = { top: 40, right: 3, bottom: 1, left: 100 },
     width = 1300 - margin.left - margin.right,
     height = 3000 - margin.top - margin.bottom;
@@ -22,7 +23,7 @@ const frequencyChart = (wordCount, creatingChart, setCreatingChart) => {
     setCreatingChart(false);
   }
 
-  console.log("new plot", histsvg.node());
+  // console.log("new plot", histsvg.node());
   return histsvg.node();
 };
 
@@ -232,35 +233,11 @@ function mostCommonWord(wordCount) {
   return Object.keys(wordCount).reduce((a, b) =>
     wordCount[a] > wordCount[b] ? a : b
   );
-  /* console.log(
-    "start...",
-    wordCount,
-    Object.keys(wordCount).reduce((a, b) =>
-      wordCount[a] > wordCount[b] ? a : b
-    ),
-    wordCount[
-      Object.keys(wordCount).reduce((a, b) =>
-        wordCount[a] > wordCount[b] ? a : b
-      )
-    ]
-  ); */
 }
 function leastCommonWord(wordCount) {
   return Object.keys(wordCount).reduce((a, b) =>
     wordCount[a] < wordCount[b] ? a : b
   );
-  /* console.log(
-    "start...",
-    wordCount,
-    Object.keys(wordCount).reduce((a, b) =>
-      wordCount[a] > wordCount[b] ? a : b
-    ),
-    wordCount[
-      Object.keys(wordCount).reduce((a, b) =>
-        wordCount[a] > wordCount[b] ? a : b
-      )
-    ]
-  ); */
 }
 
 function barPlot(g, wordCount, margin, width, height) {
@@ -287,7 +264,6 @@ function barPlot(g, wordCount, margin, width, height) {
       return y(d[0]);
     })
     .attr("width", function (d) {
-      //   console.log(d[1]);
       return x(d[1]);
     })
     .attr("ry", 3)
@@ -295,7 +271,6 @@ function barPlot(g, wordCount, margin, width, height) {
       return d3.interpolate("pink", "darkgrey")(d3.randomUniform()());
     })
     .attr("height", y.bandwidth() - 10);
-  /* .attr("fill", barColors(randomNum)) */
   bottomAxis(g, height, x);
   leftAxis(g, margin, y);
 }

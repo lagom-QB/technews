@@ -4,6 +4,7 @@ import styles from "./fetcher.module.css";
 import * as d3 from "d3";
 
 const chart = (apiData, creatingChart, setCreatingChart) => {
+  console.log("Creating first chart here...");
   const margin = { top: 0, right: 1, bottom: 1, left: 1 },
     svgWidth = 760 - margin.left - margin.right,
     svgHeight = 120, //- margin.top - margin.bottom,
@@ -126,12 +127,10 @@ function AboutTime() {
             setCreatingChart
           );
 
-          console.log("plot ...", plot);
+          // console.log("plot ...", plot);
+          if (creatingChart) return "building Chart...";
 
           if (svg.current) {
-            if (creatingChart) {
-              return "building Chart...";
-            }
             svg.current.appendChild(plot);
           }
         })

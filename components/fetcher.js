@@ -104,11 +104,33 @@ const chart = (apiData, creatingChart, setCreatingChart) => {
 
   return svg.node();
 };
-
+function toObjectConverter(sentence) {
+  return sentence
+    .replace(/[.,?!;()"'-]/g, " ")
+    .replace(/\s+/g, " ")
+    .toLowerCase()
+    .split(" ")
+    .reduce((index, word) => {
+      if (!index.hasOwnProperty(word)) index[word] = 0;
+      index[word]++;
+      return index;
+    }, {});
+}
+function mostCommonWord(wordCount) {
+  return Object.keys(wordCount).reduce((a, b) =>
+    wordCount[a] > wordCount[b] ? a : b
+  );
+}
+function leastCommonWord(wordCount) {
+  return Object.keys(wordCount).reduce((a, b) =>
+    wordCount[a] < wordCount[b] ? a : b
+  );
+}
 function AboutTime() {
   const url = "https://www.reddit.com/r/technews/hot.json?limit=100000",
     [apiData, setApiData] = useState(null),
     [error, setError] = useState(null),
+    [times, setTimes] = useState(null),
     [loading, setLoading] = useState(true),
     [creatingChart, setCreatingChart] = useState(true),
     svg = useRef(null);
@@ -124,6 +146,14 @@ function AboutTime() {
         })
         .then((apiData) => {
           setApiData(apiData.data.children);
+
+          let ts = "",
+            res = apiData.data.children.map((obj, idx) => {
+              ts += " " + new Date(obj.data.created).toLocaleTimeString();
+            });
+
+          setTimes(toObjectConverter(ts));
+          console.log("times ..", times);
 
           const plot = chart(
             apiData.data.children,
@@ -149,8 +179,8 @@ function AboutTime() {
   }, []);
 
   if (loading) return "loading...";
-
   if (error) return "Error !" + error;
+  console.log(apiData);
 
   return (
     <div className={styles.data}>
@@ -196,9 +226,10 @@ function AboutTime() {
 
         <hr />
         <div className={styles.text}>
-          I realised the fewest post were made at{" "}
-          <code className={styles.conclude}>5:00:52</code> while the most posts
-          were made at<code className={styles.conclude}>4:59:58</code>
+          I realised <u><em>{times[leastCommonWord(times)]} </em></u> post was/were made
+          at <code className={styles.conclude}>{leastCommonWord(times)}</code>{" "}
+          while <u><em>{times[mostCommonWord(times)]} </em></u> posts was/were made at
+          <code className={styles.conclude}>{mostCommonWord(times)}</code>
         </div>
       </div>
     </div>

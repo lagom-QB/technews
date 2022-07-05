@@ -2,7 +2,6 @@
   "name": "technews",
   "version": "0.1.0",
   "private": true,
-  "license": "UNLICENSED",
   "homepage": "https://lagom-qb.github.io/technews",
   "scripts": {
     "predeploy": "npm run build",

@@ -1,6 +1,5 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import { Suspense } from "react";
 
 import AboutTime from "../components/fetcher";
 import WordCount from "../components/fetcher1";
@@ -47,7 +46,7 @@ export default function Home() {
           <a href="http://reddit.com/r/technews" target="_blank">
             r/technews
           </a>{" "}
-          has <em>470000+</em> subscribers. It shows how often the posts are
+          has <em>473579</em> subscribers. It shows how often the posts are
           being crossposted, and what the population is talking about recently.
           For the recent posts, I use the previous and current day to look at
           frequent words.
@@ -69,10 +68,8 @@ export default function Home() {
           each post because it will be important in my analysis.
         </div>
 
-        <Suspense fallback={`Loading Graphs ...`}>
-          <AboutTime />
-          <WordCount />
-        </Suspense>
+        <AboutTime />
+        <WordCount />
 
         <div className={styles.text}>
           In the future, what would be interesting to explore?

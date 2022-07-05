@@ -2,7 +2,7 @@
   resize: both;
   text-align: center;
   line-height: 1.5;
-  font-size: 2.2rem;
+  font-size: 1.3rem;
   font-weight: 300;
   font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
   min-width: 40rem;
@@ -11,7 +11,7 @@
 .title {
   margin: 1rem 0;
   line-height: 1.5;
-  font-size: 2.5rem;
+  font-size: 1.7rem;
   font-weight: 300;
   color: #878787;
   max-width: 40rem;
@@ -22,7 +22,7 @@
 }
 .listItem {
   text-align: left;
-  font-size: 2.2rem;
+  font-size: 1.3rem;
 }
 .listItem a {
   color: #0070f3;
@@ -43,7 +43,7 @@
 .text {
   margin: 2rem 0;
   line-height: 1.5;
-  font-size: 2.2rem;
+  font-size: 1.5rem;
   font-weight: 300;
   color: rgba(122, 122, 122, 1);
   font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
@@ -55,5 +55,5 @@
   background: rgba(122, 122, 122, 0.63);
   border-radius: 2px;
   padding: 0.5rem;
-  font-size: 2rem;
+  font-size: 1.2rem;
 }

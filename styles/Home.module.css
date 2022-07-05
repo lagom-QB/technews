@@ -1,5 +1,6 @@
 .container {
-  padding: 0 2rem;
+  padding: 0 25%;
+  width: 100vw;
 }
 
 .main {
@@ -46,9 +47,9 @@
   overflow: auto;
   min-height: 15rem;
   min-width: 40rem;
-  width: 40rem;
   margin: 0 auto;
   font-weight: 300;
+  justify-content: center;
 }
 
 .title,
@@ -89,7 +90,7 @@
   color: #fffed1;
   background: rgb(0 112 244 / 63%);
   border-radius: 2px;
-  padding: 0.75rem;
+  padding: 0.45rem;
   font-size: 2.1rem;
   font-family: Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
     Bitstream Vera Sans Mono, Courier New, monospace;

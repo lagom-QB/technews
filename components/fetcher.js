@@ -3,7 +3,7 @@ import styles from "./fetcher.module.css";
 
 import * as d3 from "d3";
 
-const chart = (apiData) => {
+const chart = (apiData, creatingChart, setCreatingChart) => {
   const margin = { top: 0, right: 1, bottom: 1, left: 1 },
     svgWidth = 760 - margin.left - margin.right,
     svgHeight = 120, //- margin.top - margin.bottom,
@@ -32,11 +32,6 @@ const chart = (apiData) => {
         .attr("stroke-width", 0.4);
     },
     mouseover = (d) => {
-      // console.log(
-      //   "mouse entered",
-      //   d.toElement.innerHTML.split(",")[1].split("<")[0]
-      // );
-
       d3.select(this)
         .style("opacity", 0.8)
         .attr("fill", "#7ED26D")
@@ -55,13 +50,6 @@ const chart = (apiData) => {
         .style("font-size", 30)
         .text(d.toElement.innerHTML.split(",")[1].split("<")[0]);
     };
-  /*  svg
-    .append("text")
-    .attr("fill", "#0C9CDF")
-    .attr("transform", "translate(320,0)")
-    .style("font-size", "16px")
-    .style("text-decoration", "underline")
-    .text("Times users made posts"); */
 
   svg
     .selectAll("mycircle")
@@ -104,7 +92,11 @@ const chart = (apiData) => {
     .text(
       (d) => new Date(d.data.created_utc).toLocaleString() //.split(" ")[0].slice(0, 5)
     );
-  console.log("plot ...", svg.node());
+
+  if (svg.node()) {
+    setCreatingChart(false);
+  }
+
   return svg.node();
 };
 
@@ -113,6 +105,7 @@ function AboutTime() {
     [apiData, setApiData] = useState(null),
     [error, setError] = useState(null),
     [loading, setLoading] = useState(true),
+    [creatingChart, setCreatingChart] = useState(true),
     svg = useRef(null);
 
   useEffect(() => {
@@ -127,9 +120,18 @@ function AboutTime() {
         .then((apiData) => {
           setApiData(apiData.data.children);
 
-          const plot = chart(apiData.data.children);
+          const plot = chart(
+            apiData.data.children,
+            creatingChart,
+            setCreatingChart
+          );
+
+          console.log("plot ...", plot);
 
           if (svg.current) {
+            if (creatingChart) {
+              return "building Chart...";
+            }
             svg.current.appendChild(plot);
           }
         })
@@ -146,6 +148,7 @@ function AboutTime() {
   }, []);
 
   if (loading) return "loading...";
+
   if (error) return "Error !" + error;
 
   return (

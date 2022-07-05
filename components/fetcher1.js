@@ -3,7 +3,7 @@ import styles from "./fetcher1.module.css";
 // Bring in the d3 library
 import * as d3 from "d3";
 
-const frequencyChart = (wordCount) => {
+const frequencyChart = (wordCount, creatingChart, setCreatingChart) => {
   const margin = { top: 40, right: 3, bottom: 1, left: 100 },
     width = 1300 - margin.left - margin.right,
     height = 3000 - margin.top - margin.bottom;
@@ -18,6 +18,9 @@ const frequencyChart = (wordCount) => {
   barPlot(g, wordCount, margin, width, height);
 
   titleText(histsvg);
+  if (histsvg.node()) {
+    setCreatingChart(false);
+  }
 
   console.log("new plot", histsvg.node());
   return histsvg.node();
@@ -333,6 +336,7 @@ function WordCount() {
     [loading, setLoading] = useState(true),
     [wordsObject, setWordsObject] = useState(true),
     [titleText, setTitleText] = useState(null),
+    [creatingChart, setCreatingChart] = useState(true),
     wordSvg = useRef(null);
 
   useEffect(() => {
@@ -354,10 +358,17 @@ function WordCount() {
           setTitleText(titles);
 
           var wordfrequency = wordFreq(titles);
-          var newplot = frequencyChart(wordfrequency);
+          var newplot = frequencyChart(
+            wordfrequency,
+            creatingChart,
+            setCreatingChart
+          );
           setWordsObject(wordfrequency);
 
           if (wordSvg.current) {
+            if (creatingChart) {
+              return "building Chart...";
+            }
             wordSvg.current.appendChild(newplot);
           }
         })

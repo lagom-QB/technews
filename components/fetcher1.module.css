@@ -30,17 +30,18 @@
 }
 
 .wordsPlot {
-  min-height: 70rem;
-  min-width: 60rem;
+  min-height: 7rem;
+  min-width: 21vw;
   border-radius: 11px;
   border: 0.1px solid rgb(35 35 35 / 10%);
-  padding: 0.3rem;
-  overflow: hidden;
+  padding: -16.700000000000003rem;
+  overflow: auto;
+  margin: 0 auto;
 }
 .text {
-  margin: 2rem 0;
+  margin: 2rem 1rem;
   line-height: 1.5;
-  font-size: 2.2rem;
+  font-size: 2rem;
   font-weight: 300;
   color: rgba(122, 122, 122, 1);
   font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
@@ -51,6 +52,6 @@
   color: #fffed1;
   background: rgba(122, 122, 122, 0.63);
   border-radius: 2px;
-  padding: 0.5rem;
+  padding: 0.25rem;
   font-size: 2rem;
 }

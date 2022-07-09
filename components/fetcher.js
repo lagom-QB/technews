@@ -18,12 +18,12 @@ const chart = (apiData, creatingChart, setCreatingChart) => {
       .attr("height", svgHeight * 2),
     mouseout = function (d) {
       // console.log("mouse left");
-      d3.selectAll("#tooltip").transition().delay(5).remove();
+      d3.selectAll("#tooltip").remove();
 
       d3.select(this)
-        .style("opacity", 0.8)
+        .style("opacity", 0.6)
         .attr("fill", "#0C9CDF")
-        .attr("stroke", "white")
+        .attr("stroke", "grey")
         .attr("stroke-width", 0.4);
     },
     mouseover = (d) => {
@@ -84,7 +84,7 @@ const chart = (apiData, creatingChart, setCreatingChart) => {
       return res * 2; */
       return parseInt(time[1]) + parseInt(time[2]);
     })
-    .attr("fill", "red")
+    .attr("fill", "#7ED26D")
     .attr("opacity", 0.8)
     // .style("margin-top", 20)
     .on("mouseover", mouseover)
@@ -94,14 +94,14 @@ const chart = (apiData, creatingChart, setCreatingChart) => {
       (d) => new Date(d.data.created_utc).toLocaleString() //.split(" ")[0].slice(0, 5)
     );
 
-  if (svg.node()) {
-    setCreatingChart(false);
-    console.log("Created the First graph");
-  } else {
-    console.log("unable to create the first graph", svg.node());
-  }
+  // if (svg.node()) {
+  //   setCreatingChart(false);
+  //   console.log("Created the First graph");
+  // } else {
+  //   console.log("unable to create the first graph", svg.node());
+  // }
 
-  return svg.node();
+  // return svg.node();
 };
 function toObjectConverter(sentence) {
   return sentence
@@ -125,6 +125,7 @@ function leastCommonWord(wordCount) {
     wordCount[a] < wordCount[b] ? a : b
   );
 }
+
 function AboutTime() {
   const url = "https://www.reddit.com/r/technews/hot.json?limit=100000",
     [apiData, setApiData] = useState(null),
@@ -152,7 +153,6 @@ function AboutTime() {
             });
 
           setTimes(toObjectConverter(ts));
-          console.log("times ..", times);
 
           const plot = chart(
             apiData.data.children,
@@ -220,7 +220,7 @@ function AboutTime() {
           How often do the people post at given times?
         </span>
         <Suspense fallback={"Building chart..."}>
-          <div className={styles.plot} ref={svg} id="plot"></div>
+          <div className={styles.plot} ref={svg} id="plot" />
         </Suspense>
 
         <hr />
@@ -236,35 +236,3 @@ function AboutTime() {
 }
 
 export default AboutTime;
-
-{
-  /*  <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div> */
-}

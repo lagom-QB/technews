@@ -1,6 +1,5 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import { Suspense } from "react";
 
 import AboutTime from "../components/fetcher";
 import WordCount from "../components/fetcher1";
@@ -69,10 +68,8 @@ export default function Home() {
           each post because it will be important in my analysis.
         </div>
 
-        <Suspense fallback={`Loading Graphs ...`}>
-          <AboutTime />
-          <WordCount />
-        </Suspense>
+        <AboutTime />
+        <WordCount />
 
         <div className={styles.text}>
           In the future, what would be interesting to explore?

@@ -193,7 +193,7 @@ function AboutTime() {
               </a>
               <br />
               {"By " +
-                <span style={{ color: "blue" }}>obj.data.author</span> +
+                <span style={{ color: "blue" }}>{obj.data.author}</span> +
                 " recieving " +
                 obj.data.num_comments +
                 " comments and " +

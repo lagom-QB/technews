@@ -25,6 +25,13 @@
     margin: 0;
     padding: 0;
   }
+
+  .title {
+    font-size: 4rem;
+    max-width: 40rem;
+    font-weight: 300;
+    justify-content: center;
+  }
 }
 .footer {
   display: flex;

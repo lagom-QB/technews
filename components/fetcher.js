@@ -98,7 +98,7 @@ const chart = (apiData, creatingChart, setCreatingChart) => {
     setCreatingChart(false);
     console.log("Created the First graph");
   } else {
-    console.log("unable to create the first graph", svg);
+    console.log("unable to create the first graph", svg.node());
   }
 
   return svg.node();

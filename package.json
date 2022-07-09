@@ -5,7 +5,7 @@
   "homepage": "https://lagom-qb.github.io/technews",
   "scripts": {
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "deploy": "gh-pages -d out -t true",
     "lint": "next lint",
     "export": "next export",
     "dev": "next dev",

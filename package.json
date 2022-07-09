@@ -10,8 +10,7 @@
     "export": "next export",
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "static": "next build && next export && touch ./out/.nojekyll && echo 'https://lagom-qb.github.io/technew' > ./out/CNAME"
+    "start": "next start"
   },
   "dependencies": {
     "@types/d3": "^7.4.0",

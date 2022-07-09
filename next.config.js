@@ -2,6 +2,6 @@
 
 module.exports = {
   reactStrictMode: true,
-  /* assetPrefix: "/technews/",
-  basePath: "/technews", */
+  assetPrefix: "/technews/",
+  basePath: "/technews",
 };

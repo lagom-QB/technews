@@ -23,7 +23,7 @@ const frequencyChart = (wordCount, creatingChart, setCreatingChart) => {
     setCreatingChart(false);
     console.log("Created the Second graph");
   } else {
-    console.log("unable to create the second graph");
+    console.log("unable to create the second graph", histsvg);
   }
 
   // console.log("new plot", histsvg.node());

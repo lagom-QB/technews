@@ -94,14 +94,14 @@ const chart = (apiData, creatingChart, setCreatingChart) => {
       (d) => new Date(d.data.created_utc).toLocaleString() //.split(" ")[0].slice(0, 5)
     );
 
-  // if (svg.node()) {
-  //   setCreatingChart(false);
-  //   console.log("Created the First graph");
-  // } else {
-  //   console.log("unable to create the first graph", svg.node());
-  // }
+  if (svg.node()) {
+    setCreatingChart(false);
+    console.log("Created the First graph");
+  } else {
+    console.log("unable to create the first graph", svg.node());
+  }
 
-  // return svg.node();
+  return svg.node();
 };
 function toObjectConverter(sentence) {
   return sentence

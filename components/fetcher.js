@@ -5,23 +5,18 @@ import * as d3 from "d3";
 
 const chart = (apiData, creatingChart, setCreatingChart) => {
   console.log("Creating first chart here...");
-  const margin = { top: 0, right: 1, bottom: 1, left: 1 },
-    svgWidth = 760 - margin.left - margin.right,
-    svgHeight = 120, //- margin.top - margin.bottom,
+  const margin = { top: 10, right: 25, bottom: 1, left: 25 },
+    svgWidth = 1200,
+    svgHeight = 90,
     data = apiData;
 
   var svg = d3
       .select("#plot")
       .append("svg")
       .attr("viewBox", [0, 0, 1300, 80])
-      .attr("width", svgWidth + margin.left + margin.right)
-      .attr("height", svgHeight + margin.top + margin.bottom)
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")"),
-    /* .call(
-        d3.zoom().on("zoom", function () {
-          svg.attr("transform", d3.zoomTransform(this));
-        })
-      ) */ mouseout = function (d) {
+      .attr("width", svgWidth - 100)
+      .attr("height", svgHeight * 2),
+    mouseout = function (d) {
       // console.log("mouse left");
       d3.selectAll("#tooltip").transition().delay(5).remove();
 
@@ -42,10 +37,15 @@ const chart = (apiData, creatingChart, setCreatingChart) => {
         .append("text")
         .attr("id", "tooltip")
         .style("opacity", 0.8)
-        .attr("fill", "#0C9CDF")
+        .attr("fill", "black")
         .attr(
           "transform",
-          "translate(" + margin.left + "," + margin.top + margin.bottom + ")"
+          "translate(" +
+            svgWidth / 2 +
+            "," +
+            svgHeight / 10 +
+            margin.bottom * 2 +
+            ")"
         )
         .style("font-size", 30)
         .text(d.toElement.innerHTML.split(",")[1].split("<")[0]);
@@ -76,12 +76,13 @@ const chart = (apiData, creatingChart, setCreatingChart) => {
         .toLocaleString()
         .split(" ")[1]
         .split(":");
-      let actual = ((time[0] * 60 + time[1] + time[2] / 60) / 100).toString();
+      /* let actual = ((time[0] * 60 + time[1] + time[2] / 60) / 100).toString();
       const res =
         actual.split(".")[1].slice(0, 1) +
         "." +
         actual.split(".")[1].slice(2, actual.length);
-      return res * 2;
+      return res * 2; */
+      return parseInt(time[1]) + parseInt(time[2]);
     })
     .attr("fill", "red")
     .attr("opacity", 0.8)
@@ -174,7 +175,7 @@ function AboutTime() {
     getData();
   }, []);
 
-  if (loading || creatingChart) return "loading...";
+  if (loading) return "loading...";
   if (error) return "Error !" + error;
   console.log(apiData);
 

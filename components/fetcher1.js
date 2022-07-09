@@ -361,7 +361,7 @@ function WordCount() {
     getData();
   }, []);
 
-  if (loading || creatingChart) return "\nloading...";
+  if (loading) return "\nloading...";
   if (error) return "Error !" + error;
 
   return (

@@ -177,7 +177,7 @@ function AboutTime() {
 
   if (loading) return "loading...";
   if (error) return "Error !" + error;
-  console.log(apiData);
+  // console.log(apiData);
 
   return (
     <div className={styles.data}>

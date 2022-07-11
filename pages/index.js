@@ -1,7 +1,7 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 
-import AboutTime from "../components/fetcher";
+import AboutTime from "../components/aboutTime";
 import WordCount from "../components/fetcher1";
 
 export default function Home() {
@@ -69,7 +69,7 @@ export default function Home() {
         </div>
 
         <AboutTime />
-        <WordCount />
+        {/* <WordCount />  */}
 
         <div className={styles.text}>
           In the future, what would be interesting to explore?

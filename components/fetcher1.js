@@ -367,35 +367,39 @@ function WordCount() {
   if (error) return "Error !" + error;
 
   return (
-    <div className={styles.data}>
-      <div className={styles.wordsPlotDiv}>
-        <br />
-        <span className={styles.title}>
-          How often do the words from the posts occur?
-        </span>
-        <div className={styles.wordsPlot} ref={wordSvg} id="wordsPlot">
-          <div className={styles.wordsGraph} id="wordsGraph"></div>
-        </div>
-        <hr />
-        <div className={styles.text}>
-          I realised the most common word is{" "}
-          <code className={styles.conclude}>{mostCommonWord(wordsObject)}</code>{" "}
-          used{" "}
-          <code className={styles.conclude}>
-            {wordsObject[mostCommonWord(wordsObject)]}
-          </code>{" "}
-          times while the least used word was
-          <code className={styles.conclude}>
-            {leastCommonWord(wordsObject)}
-          </code>{" "}
-          used{" "}
-          <code className={styles.conclude}>
-            {wordsObject[leastCommonWord(wordsObject)]}
-          </code>{" "}
-          times.
+    <React.StrictMode>
+      <div className={styles.data}>
+        <div className={styles.wordsPlotDiv}>
+          <br />
+          <span className={styles.title}>
+            How often do the words from the posts occur?
+          </span>
+          <div className={styles.wordsPlot} ref={wordSvg} id="wordsPlot">
+            <div className={styles.wordsGraph} id="wordsGraph"></div>
+          </div>
+          <hr />
+          <div className={styles.text}>
+            I realised the most common word is{" "}
+            <code className={styles.conclude}>
+              {mostCommonWord(wordsObject)}
+            </code>{" "}
+            used{" "}
+            <code className={styles.conclude}>
+              {wordsObject[mostCommonWord(wordsObject)]}
+            </code>{" "}
+            times while the least used word was
+            <code className={styles.conclude}>
+              {leastCommonWord(wordsObject)}
+            </code>{" "}
+            used{" "}
+            <code className={styles.conclude}>
+              {wordsObject[leastCommonWord(wordsObject)]}
+            </code>{" "}
+            times.
+          </div>
         </div>
       </div>
-    </div>
+    </React.StrictMode>
   );
 }
 

@@ -3,6 +3,8 @@ import styles from "./fetcher.module.css";
 
 import * as d3 from "d3";
 
+import axios from "axios";
+
 const chart = (apiData, creatingChart, setCreatingChart) => {
   console.log("Creating first chart here...");
   const margin = { top: 10, right: 25, bottom: 1, left: 25 },
@@ -95,8 +97,9 @@ const chart = (apiData, creatingChart, setCreatingChart) => {
     );
 
   if (svg.node()) {
+    const graph = svg.node();
     setCreatingChart(false);
-    console.log("Created the First graph");
+    console.log("Created the First graph", graph);
   } else {
     console.log("unable to create the first graph", svg.node());
   }
@@ -182,56 +185,58 @@ function AboutTime() {
   // console.log(apiData);
 
   return (
-    <div className={styles.data}>
-      <span className={styles.title}>Data sample</span>
-      <ol className={styles.list}>
-        {apiData.slice(0, 2).map((obj, idx) => (
-          <li key={idx} className={styles.listItem}>
-            <>
-              <a href={obj.data.url} target="_blank">
-                {obj.data.title}
-              </a>
-              <br />
-              {"By " +
-                obj.data.author +
-                " recieving " +
-                obj.data.num_comments +
-                " comments and " +
-                obj.data.num_crossposts +
-                " crossposts "}
-              <br />
-              <a
-                href={"https://www.reddit.com" + obj.data.permalink}
-                target="_blank"
-              >
-                [Reddit Post]
-              </a>
-              <br />
-              {"@"}
-              {new Date(obj.data.created_utc).toLocaleString().split(" ")[1]}
-            </>
-            <hr />
-          </li>
-        ))}
-      </ol>
-      <div className={styles.plotDiv}>
-        <br />
-        <span className={styles.title}>
-          How often do the people post at given times?
-        </span>
-        <Suspense fallback={"Building chart..."}>
-          <div className={styles.plot} ref={svg} id="plot" />
-        </Suspense>
+    <React.StrictMode>
+      <div className={styles.data}>
+        <span className={styles.title}>Data sample</span>
+        <ol className={styles.list}>
+          {apiData.slice(0, 2).map((obj, idx) => (
+            <li key={idx} className={styles.listItem}>
+              <>
+                <a href={obj.data.url} target="_blank">
+                  {obj.data.title}
+                </a>
+                <br />
+                {"By " +
+                  obj.data.author +
+                  " recieving " +
+                  obj.data.num_comments +
+                  " comments and " +
+                  obj.data.num_crossposts +
+                  " crossposts "}
+                <br />
+                <a
+                  href={"https://www.reddit.com" + obj.data.permalink}
+                  target="_blank"
+                >
+                  [Reddit Post]
+                </a>
+                <br />
+                {"@"}
+                {new Date(obj.data.created_utc).toLocaleString().split(" ")[1]}
+              </>
+              <hr />
+            </li>
+          ))}
+        </ol>
+        <div className={styles.plotDiv}>
+          <br />
+          <span className={styles.title}>
+            How often do the people post at given times?
+          </span>
 
-        <hr />
-        <div className={styles.text}>
-          I realised <u>{times[leastCommonWord(times)]} </u> post was/were made
-          at <code className={styles.conclude}>{leastCommonWord(times)}</code>{" "}
-          while <u>{times[mostCommonWord(times)]} </u> posts was/were made at
-          <code className={styles.conclude}>{mostCommonWord(times)}</code>
+          <div className={styles.plot} ref={svg} id="plot" />
+
+          <hr />
+          <div className={styles.text}>
+            I realised <u>{times[leastCommonWord(times)]} </u> post was/were
+            made at{" "}
+            <code className={styles.conclude}>{leastCommonWord(times)}</code>{" "}
+            while <u>{times[mostCommonWord(times)]} </u> posts was/were made at
+            <code className={styles.conclude}>{mostCommonWord(times)}</code>
+          </div>
         </div>
       </div>
-    </div>
+    </React.StrictMode>
   );
 }
 

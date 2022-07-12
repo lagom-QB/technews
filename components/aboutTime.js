@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, Suspense } from "react";
-import styles from "./fetcher.module.css";
+import styles from "./aboutTime.module.css";
 
 import * as d3 from "d3";
 
@@ -28,18 +28,18 @@ function leastCommonWord(wordCount) {
   );
 }
 
-function chart(apiData, setCreatingChart) {
-  let margin = { top: 10, right: 25, bottom: 1, left: 25 },
+function chart(apiData) {
+  var margin = { top: 10, right: 25, bottom: 10, left: 25 },
     svgWidth = 1200,
-    svgHeight = 90,
-    data = apiData;
-  var svg = d3
-    .select(".plot")
+    svgHeight = 90;
+
+  const scatterSvg = d3
+    .select("#plot")
     .append("svg")
     .attr("viewBox", [0, 0, 1300, 80])
     .attr("width", svgWidth - 100)
     .attr("height", svgHeight * 2);
-  let mouseout = function (d) {
+  var mouseout = function (_d) {
     // console.log("mouse left");
     d3.selectAll("#tooltip").remove();
 
@@ -49,16 +49,14 @@ function chart(apiData, setCreatingChart) {
       .attr("stroke", "grey")
       .attr("stroke-width", 0.4);
   };
-  let mouseover = (d) => {
+  var mouseover = (d) => {
     d3.select(this)
       .style("opacity", 0.8)
       .attr("fill", "#7ED26D")
       .attr("stroke", "white")
       .attr("stroke-width", 0.4);
 
-    console.log("Creating the first graph...", apiData);
-
-    svg
+    scatterSvg
       .append("text")
       .attr("id", "tooltip")
       .style("opacity", 0.8)
@@ -76,37 +74,29 @@ function chart(apiData, setCreatingChart) {
       .text(d.toElement.innerHTML.split(",")[1].split("<")[0]);
   };
 
-  svg
-    .selectAll("myScatterCircles")
+  scatterSvg
+    .selectAll("circles")
     .append("g")
-    .data(data)
+    .data(apiData)
     .enter()
     .append("circle")
-    .attr("cx", function (i) {
-      console.log("cx", i);
-      return (i + 1) * 12;
-    })
+    .attr("cx", (d, i) => (i + 1) * 12)
     .attr("cy", function (d) {
-      console.log("d: cy", d);
       const time = new Date(d.data.created)
         .toLocaleString()
         .split(" ")[1]
         .split(":");
 
       const res = time[0] * 60 + time[1];
+      console.log("cy", parseInt(res.slice(3)) + 10);
       return parseInt(res.slice(3, res.length)) + 10;
     })
     .attr("r", (d) => {
-      let time = new Date(d.data.created)
+      var time = new Date(d.data.created)
         .toLocaleString()
         .split(" ")[1]
         .split(":");
-      /* let actual = ((time[0] * 60 + time[1] + time[2] / 60) / 100).toString();
-      const res =
-        actual.split(".")[1].slice(0, 1) +
-        "." +
-        actual.split(".")[1].slice(2, actual.length);
-      return res * 2; */
+
       console.log("radius ...", parseInt(time[1]) + parseInt(time[2]));
       return parseInt(time[1]) + parseInt(time[2]);
     })
@@ -116,28 +106,23 @@ function chart(apiData, setCreatingChart) {
     .attr("opacity", 0.8)
     .attr("stroke", "white")
     .attr("stroke-width", 0.4)
-    .append("span")
-    .text(
-      (d) =>
-        new Date(d.data.created_utc).toLocaleString([], {
+    .append("div")
+    .text((d) => {
+      console.log(
+        "times",
+        new Date(d.data.created).toLocaleString([], {
           hour: "2-digit",
           minute: "2-digit",
-        }) //.split(" ")[0].slice(0, 5)
-    );
+        })
+      );
+      return new Date(d.data.created).toLocaleString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    });
 
-  console.log("data 2", svg.node());
-
-  const graph = svg.node();
-
-  if (graph) {
-    setCreatingChart(false);
-    console.log("Created the First graph", graph);
-    return graph;
-  } else {
-    console.log("unable to create the first graph");
-  }
-
-  return svg.node();
+  console.log("checking...", scatterSvg.node());
+  return scatterSvg.node();
 }
 
 function AboutTime() {
@@ -146,7 +131,6 @@ function AboutTime() {
     [error, setError] = useState(null),
     [times, setTimes] = useState(null),
     [loading, setLoading] = useState(true),
-    [creatingChart, setCreatingChart] = useState(true),
     [plot, setPlot] = useState(null),
     plotVar = null,
     svgGraph = useRef(null);
@@ -156,10 +140,9 @@ function AboutTime() {
       fetch(url)
         .then((response) => response.json())
         .then((apiData) => {
-          const dataIneed = apiData.data.children;
+          var dataIneed = apiData.data.children,
+            ts = "";
           setApiData(dataIneed);
-
-          let ts = "";
 
           dataIneed.forEach((obj) => {
             ts +=
@@ -170,12 +153,14 @@ function AboutTime() {
               });
           });
 
-          setTimes(toObjectConverter(ts.slice(5)));
+          setTimes(toObjectConverter(ts.slice(7)));
 
-          plotVar = chart(dataIneed, setCreatingChart);
+          plotVar = chart(dataIneed);
 
-          console.log("plot 1...", plotVar);
-          setPlot(plotVar);
+          if (plotVar) {
+            console.log("plot 1...", plotVar);
+            setPlot(plotVar);
+          }
           /* if (svgGraph.current) {
             svgGraph.current.appendChild(plotVar);
           } */
@@ -192,15 +177,15 @@ function AboutTime() {
     getData();
   }, []);
 
-  if (loading || creatingChart) return "loading...";
+  if (loading) return "loading...";
   if (error) return "Error !" + error;
-  console.log(apiData);
+  console.log("results ...", plot, typeof plot);
 
   return (
     <div className={styles.data}>
       <span className={styles.title}>Data sample</span>
       <ol className={styles.list}>
-        {apiData.slice(0, 2).map((obj, idx) => (
+        {apiData.slice(0, 4).map((obj, idx) => (
           <li key={idx} className={styles.listItem}>
             <>
               <a href={obj.data.url} target="_blank">
@@ -232,12 +217,16 @@ function AboutTime() {
       <div className={styles.plotDiv}>
         <br />
         <span className={styles.title}>
-          How often do the people post at given times?
+          How often do these people post at given times?
         </span>
 
         {/* <div className={styles.plot} ref={svg} id="plot" />
          */}
-        {<div className={styles.plot}>{plot}</div>}
+        {
+          <div className={styles.plot} id="plot">
+            {plot}
+          </div>
+        }
         <hr />
         <div className={styles.text}>
           I realised <u>{times[leastCommonWord(times)]} </u> post was/were made

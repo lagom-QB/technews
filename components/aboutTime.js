@@ -7,7 +7,7 @@ const chart = function (dataINeed) {
   if (!dataINeed) return "loading...";
 
   const margin = { top: 10, right: 25, bottom: 5, left: 25 },
-    svgWidth = 1200,
+    svgWidth = 1000,
     svgHeight = 90;
 
   var x = d3

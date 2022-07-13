@@ -2,7 +2,7 @@ import Head from "next/head";
 import styles from "../styles/Home.module.css";
 
 import AboutTime from "../components/aboutTime";
-import WordCount from "../components/fetcher1";
+import WordCount from "../components/wordCount";
 
 export default function Home() {
   const underlineText = { textDecoration: "underline", display: "inline" };

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import styles from "./fetcher1.module.css";
+import styles from "./wordCount.module.css";
 // Bring in the d3 library
 import * as d3 from "d3";
 
-const frequencyChart = (wordCount, creatingChart, setCreatingChart) => {
+const frequencyChart = (wordCount) => {
   console.log("Creating second chart here...");
   const margin = { top: 40, right: 3, bottom: 1, left: 100 },
     width = 1300 - margin.left - margin.right,
@@ -19,12 +19,12 @@ const frequencyChart = (wordCount, creatingChart, setCreatingChart) => {
   barPlot(g, wordCount, margin, width, height);
 
   titleText(histsvg);
-  if (histsvg.node()) {
+  /* if (histsvg.node()) {
     setCreatingChart(false);
     console.log("Created the Second graph");
   } else {
     console.log("unable to create the second graph", histsvg.node());
-  }
+  } */
 
   // console.log("new plot", histsvg.node());
   return histsvg.node();
@@ -242,7 +242,6 @@ function leastCommonWord(wordCount) {
     wordCount[a] < wordCount[b] ? a : b
   );
 }
-
 function barPlot(g, wordCount, margin, width, height) {
   var bins = d3.bin()(Object.values(wordCount)),
     x = d3
@@ -314,7 +313,7 @@ function WordCount() {
     [loading, setLoading] = useState(true),
     [wordsObject, setWordsObject] = useState(true),
     [titleText, setTitleText] = useState(null),
-    [creatingChart, setCreatingChart] = useState(true),
+    [plotVal, setPlotVal] = useState(null),
     wordSvg = useRef(null);
 
   useEffect(() => {
@@ -336,18 +335,13 @@ function WordCount() {
           setTitleText(titles);
 
           var wordfrequency = wordFreq(titles);
-          var newplot = frequencyChart(
-            wordfrequency,
-            creatingChart,
-            setCreatingChart
-          );
+          var newplot = frequencyChart(wordfrequency);
+
           setWordsObject(wordfrequency);
+          setPlotVal(newplot);
 
           console.log("plot 2...", newplot);
           if (wordSvg.current) {
-            if (creatingChart) {
-              return "building Chart...";
-            }
             wordSvg.current.appendChild(newplot);
           }
         })
@@ -361,7 +355,7 @@ function WordCount() {
     };
 
     getData();
-  }, []);
+  }, [loading]);
 
   if (loading) return "\nloading...";
   if (error) return "Error !" + error;
@@ -375,7 +369,7 @@ function WordCount() {
             How often do the words from the posts occur?
           </span>
           <div className={styles.wordsPlot} ref={wordSvg} id="wordsPlot">
-            <div className={styles.wordsGraph} id="wordsGraph"></div>
+            {/* <div className={styles.wordsGraph} id="wordsGraph"></div> */}
           </div>
           <hr />
           <div className={styles.text}>

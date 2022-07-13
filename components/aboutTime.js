@@ -3,8 +3,100 @@ import styles from "./aboutTime.module.css";
 
 import * as d3 from "d3";
 
+const chart = function (dataINeed) {
+  if (!dataINeed) return "loading...";
+
+  const margin = { top: 10, right: 25, bottom: 5, left: 25 },
+    svgWidth = 1200,
+    svgHeight = 90;
+
+  var x = d3
+      .scaleLinear()
+      .domain([0, Object.values(dataINeed).length])
+      .range([margin.left, svgWidth - margin.right]),
+    xAxis = (g) =>
+      g
+        .attr(
+          "transform",
+          `translate(${margin.left - 10},${svgHeight - margin.bottom})`
+        )
+        .call(d3.axisBottom(x).ticks(1));
+
+  var colorScheme = d3.interpolateRdBu;
+  var color = d3.scaleOrdinal(d3.schemeCategory10);
+
+  var svg = d3
+    .select("#plot")
+    .append("svg")
+    .attr("viewBox", [0, 0, 1300, 80])
+    .attr("width", svgWidth - 100)
+    .attr("height", svgHeight * 2);
+  var mouseout = function (d) {
+    d3.selectAll("#tooltip").remove();
+
+    d3.select(this)
+      .style("opacity", 0.6)
+      .attr("fill", "#0C9CDF")
+      .attr("stroke", "grey")
+      .attr("stroke-width", 0.4);
+  };
+  var mouseover = function (d) {
+    d3.select(this)
+      .style("opacity", 0.8)
+      .attr("fill", "#7ED26D")
+      .attr("stroke", "white")
+      .attr("stroke-width", 0.4);
+
+    svg
+      .append("text")
+      .attr("id", "tooltip")
+      .style("opacity", 0.8)
+      .attr("fill", "gray")
+      .attr(
+        "transform",
+        `translate(${svgWidth / 2 - margin.left + margin.right},${
+          margin.top + margin.bottom
+        })`
+      )
+      .style("font-size", 30)
+      .text(d.toElement.innerHTML.slice(6, -7) + " posts");
+  };
+  var g = svg.append("g").attr("class", "scatterPlot");
+
+  scatterPlot(g, dataINeed, mouseover, mouseout, margin);
+  svg.append("g").attr("class", "bottomAxis").call(xAxis);
+  console.log("finally ...", svg.node());
+
+  return svg.node();
+};
+function scatterPlot(svg, dataINeed, mouseover, mouseout, margin) {
+  return svg
+    .attr("transform", `translate(${margin.left + margin.right},${margin.top})`)
+    .selectAll("myCircle")
+    .data(Object.values(dataINeed))
+    .enter()
+    .append("circle")
+    .attr("cx", (d, i) => {
+      // Move along the x axis
+      return i * 60;
+    })
+    .attr("cy", 90)
+    .attr("r", (d) => {
+      // console.log("radius -->", d);
+      return d * 3;
+    })
+    .attr("fill", "#0C9CDF")
+    .attr("opacity", 0.8)
+    .on("mouseover", mouseover)
+    .on("mouseout", mouseout)
+    .attr("stroke", "grey")
+    .attr("stroke-width", 0.4)
+    .append("span")
+    .text((d) => d);
+}
+
 function toObjectConverter(sentence) {
-  const res = sentence
+  return sentence
     .replace(/[.,?!;()"'-]/g, " ")
     .replace(/\s+/g, " ")
     .toLowerCase()
@@ -14,9 +106,7 @@ function toObjectConverter(sentence) {
       index[word]++;
       return index;
     }, {});
-  return res;
 }
-
 function mostCommonWord(wordCount) {
   return Object.keys(wordCount).reduce((a, b) =>
     wordCount[a] > wordCount[b] ? a : b
@@ -27,113 +117,14 @@ function leastCommonWord(wordCount) {
     wordCount[a] < wordCount[b] ? a : b
   );
 }
-
-function chart(apiData) {
-  var margin = { top: 10, right: 25, bottom: 10, left: 25 },
-    svgWidth = 1200,
-    svgHeight = 90;
-
-  const scatterSvg = d3
-    .select("#plot")
-    .append("svg")
-    .attr("viewBox", [0, 0, 1300, 80])
-    .attr("width", svgWidth - 100)
-    .attr("height", svgHeight * 2);
-  var mouseout = function (_d) {
-    // console.log("mouse left");
-    d3.selectAll("#tooltip").remove();
-
-    d3.select(this)
-      .style("opacity", 0.6)
-      .attr("fill", "#0C9CDF")
-      .attr("stroke", "grey")
-      .attr("stroke-width", 0.4);
-  };
-  var mouseover = (d) => {
-    d3.select(this)
-      .style("opacity", 0.8)
-      .attr("fill", "#7ED26D")
-      .attr("stroke", "white")
-      .attr("stroke-width", 0.4);
-
-    scatterSvg
-      .append("text")
-      .attr("id", "tooltip")
-      .style("opacity", 0.8)
-      .attr("fill", "black")
-      .attr(
-        "transform",
-        "translate(" +
-          svgWidth / 2 +
-          "," +
-          svgHeight / 10 +
-          margin.bottom * 2 +
-          ")"
-      )
-      .style("font-size", 30)
-      .text(d.toElement.innerHTML.split(",")[1].split("<")[0]);
-  };
-
-  scatterSvg
-    .selectAll("circles")
-    .append("g")
-    .data(apiData)
-    .enter()
-    .append("circle")
-    .attr("cx", (d, i) => (i + 1) * 12)
-    .attr("cy", function (d) {
-      const time = new Date(d.data.created)
-        .toLocaleString()
-        .split(" ")[1]
-        .split(":");
-
-      const res = time[0] * 60 + time[1];
-      console.log("cy", parseInt(res.slice(3)) + 10);
-      return parseInt(res.slice(3, res.length)) + 10;
-    })
-    .attr("r", (d) => {
-      var time = new Date(d.data.created)
-        .toLocaleString()
-        .split(" ")[1]
-        .split(":");
-
-      console.log("radius ...", parseInt(time[1]) + parseInt(time[2]));
-      return parseInt(time[1]) + parseInt(time[2]);
-    })
-    .attr("fill", "#7ED26D")
-    .on("mouseover", mouseover)
-    .on("mouseout", mouseout)
-    .attr("opacity", 0.8)
-    .attr("stroke", "white")
-    .attr("stroke-width", 0.4)
-    .append("div")
-    .text((d) => {
-      console.log(
-        "times",
-        new Date(d.data.created).toLocaleString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        })
-      );
-      return new Date(d.data.created).toLocaleString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-    });
-
-  console.log("checking...", scatterSvg.node());
-  return scatterSvg.node();
-}
-
 function AboutTime() {
   var url = "https://www.reddit.com/r/technews/hot.json?limit=100000",
     [apiData, setApiData] = useState(null),
     [error, setError] = useState(null),
     [times, setTimes] = useState(null),
     [loading, setLoading] = useState(true),
-    [plot, setPlot] = useState(null),
-    plotVar = null,
-    svgGraph = useRef(null);
+    [plotVal, setPlotVal] = useState(null),
+    svg = useRef(null);
 
   useEffect(() => {
     const getData = async () => {
@@ -152,21 +143,19 @@ function AboutTime() {
                 minute: "2-digit",
               });
           });
+          const timeVal = toObjectConverter(ts.slice(7));
+          setTimes(timeVal);
 
-          setTimes(toObjectConverter(ts.slice(7)));
-
-          plotVar = chart(dataIneed);
-
-          if (plotVar) {
-            console.log("plot 1...", plotVar);
-            setPlot(plotVar);
+          // const plot = chart(dataIneed);
+          const plot = chart(timeVal);
+          console.log("plot 1...", plot);
+          setPlotVal(plot);
+          if (svg.current) {
+            svg.current.appendChild(plot);
           }
-          /* if (svgGraph.current) {
-            svgGraph.current.appendChild(plotVar);
-          } */
         })
         .catch((error) => {
-          console.error("Error fetching data :\n" + error);
+          console.error("Error fetching data :\t" + error);
           setError(error);
         })
         .finally(() => {
@@ -175,11 +164,11 @@ function AboutTime() {
     };
 
     getData();
-  }, []);
+  }, [loading]);
 
   if (loading) return "loading...";
   if (error) return "Error !" + error;
-  console.log("results ...", plot, typeof plot);
+  console.log("plotVal...", plotVal);
 
   return (
     <div className={styles.data}>
@@ -193,7 +182,7 @@ function AboutTime() {
               </a>
               <br />
               {"By " +
-                obj.data.author +
+                <span style={{ color: "blue" }}>obj.data.author</span> +
                 " recieving " +
                 obj.data.num_comments +
                 " comments and " +
@@ -217,16 +206,11 @@ function AboutTime() {
       <div className={styles.plotDiv}>
         <br />
         <span className={styles.title}>
-          How often do these people post at given times?
+          How often do the people post at given times?
         </span>
-
-        {/* <div className={styles.plot} ref={svg} id="plot" />
-         */}
-        {
-          <div className={styles.plot} id="plot">
-            {plot}
-          </div>
-        }
+        <Suspense fallback={"Building chart..."}>
+          <div className={styles.plot} ref={svg} id="plot"></div>
+        </Suspense>
         <hr />
         <div className={styles.text}>
           I realised <u>{times[leastCommonWord(times)]} </u> post was/were made
@@ -238,4 +222,5 @@ function AboutTime() {
     </div>
   );
 }
+
 export default AboutTime;

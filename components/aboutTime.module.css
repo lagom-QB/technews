@@ -35,12 +35,13 @@
   /* width: 90vw; */
 }
 .plot {
-  min-height: 7rem;
+  min-height: 4rem;
+  width:fit-content;
   margin: 0 auto;
   border-radius: 11px;
   border: 0.1px solid rgb(35 35 35 / 10%);
   padding: 0.3rem;
-  overflow: hidden;
+  overflow: auto;
   margin-right: 1rem;
 }
 .text {

@@ -69,7 +69,7 @@ export default function Home() {
         </div>
 
         <AboutTime />
-        {/* <WordCount />  */}
+        <WordCount /> 
 
         <div className={styles.text}>
           In the future, what would be interesting to explore?

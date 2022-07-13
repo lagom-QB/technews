@@ -59,7 +59,7 @@ const chart = function (dataINeed) {
         })`
       )
       .style("font-size", 30)
-      .text(d.toElement.innerHTML.slice(6, -7) + " posts");
+      .text(d.toElement.innerHTML.slice(6, -7) + " Hrs");
   };
   var g = svg.append("g").attr("class", "scatterPlot");
 
@@ -73,7 +73,7 @@ function scatterPlot(svg, dataINeed, mouseover, mouseout, margin) {
   return svg
     .attr("transform", `translate(${margin.left + margin.right},${margin.top})`)
     .selectAll("myCircle")
-    .data(Object.values(dataINeed))
+    .data(Object.entries(dataINeed))
     .enter()
     .append("circle")
     .attr("cx", (d, i) => {
@@ -82,8 +82,8 @@ function scatterPlot(svg, dataINeed, mouseover, mouseout, margin) {
     })
     .attr("cy", 90)
     .attr("r", (d) => {
-      // console.log("radius -->", d);
-      return d * 3;
+      console.log("radius -->", d);
+      return d[1] * 3;
     })
     .attr("fill", "#0C9CDF")
     .attr("opacity", 0.8)
@@ -92,7 +92,7 @@ function scatterPlot(svg, dataINeed, mouseover, mouseout, margin) {
     .attr("stroke", "grey")
     .attr("stroke-width", 0.4)
     .append("span")
-    .text((d) => d);
+    .text((d) => d[0]);
 }
 
 function toObjectConverter(sentence) {

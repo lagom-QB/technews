@@ -18,7 +18,7 @@ const chart = function (dataINeed) {
       g
         .attr(
           "transform",
-          `translate(${margin.left - 10},${svgHeight - margin.bottom})`
+          `translate(${margin.left},${svgHeight - margin.bottom})`
         )
         .call(d3.axisBottom(x).ticks(1));
 
@@ -29,7 +29,7 @@ const chart = function (dataINeed) {
     .select("#plot")
     .append("svg")
     .attr("viewBox", [0, 0, 1300, 80])
-    .attr("width", svgWidth - 100)
+    .attr("width", svgWidth)
     .attr("height", svgHeight * 2);
   var mouseout = function (d) {
     d3.selectAll("#tooltip").remove();
@@ -64,7 +64,7 @@ const chart = function (dataINeed) {
   var g = svg.append("g").attr("class", "scatterPlot");
 
   scatterPlot(g, dataINeed, mouseover, mouseout, margin);
-  svg.append("g").attr("class", "bottomAxis").call(xAxis);
+  // svg.append("g").attr("class", "bottomAxis").call(xAxis);
   console.log("finally ...", svg.node());
 
   return svg.node();

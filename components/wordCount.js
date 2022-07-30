@@ -273,7 +273,7 @@ function barPlot(g, wordCount, margin, width, height) {
       return d3.interpolate("pink", "darkgrey")(d3.randomUniform()());
     })
     .attr("height", y.bandwidth() - 10);
-  bottomAxis(g, height, x);
+  //bottomAxis(g, height, x);
   leftAxis(g, margin, y);
 }
 function titleText(histsvg) {
